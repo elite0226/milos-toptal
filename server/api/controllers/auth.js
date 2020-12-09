@@ -1,5 +1,5 @@
-const db = require('../../db/models');
-const { ROLES } = require('../../constants');
+const db = require('../db/models');
+const { ROLES } = require('../constants');
 
 const login = async (req, res) => {
   const { email, password } = req.body;
