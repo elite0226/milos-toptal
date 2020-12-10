@@ -2,7 +2,7 @@ const express = require('express');
 
 const restaurantController = require('../controllers/restaurant');
 const middlewares = require('../middlewares');
-const { ROLES } = require('../../constants');
+const { ROLES } = require('../constants');
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 const { Op } = require('sequelize');
 
 const db = require('../db/models');
-const { ROLES } = require('../../constants');
+const { ROLES } = require('../constants');
 
 const get = async (req, res) => {
   const { limit, offset, minRating, maxRating } = req.query;
