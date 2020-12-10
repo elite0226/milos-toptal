@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import { requestFulfilled, requestRejected } from 'src/utils/api';
-import { LOGIN_REQUEST, SIGNUP_REQUEST } from '../types';
+import { LOGIN_REQUEST, LOGOUT_REQUEST, SIGNUP_REQUEST } from '../types';
 
 const initialState = {
   profile: null,
@@ -34,5 +34,12 @@ export default createReducer(initialState, {
     profile: null,
     error: payload.error,
     status: requestRejected(SIGNUP_REQUEST),
+  }),
+
+  [LOGOUT_REQUEST]: (state) => ({
+    ...state,
+    profile: null,
+    error: null,
+    status: LOGOUT_REQUEST,
   }),
 });
