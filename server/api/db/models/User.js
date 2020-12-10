@@ -63,7 +63,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.beforeCreate(async (user) => {
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const salt = await bcrypt.genSalt(+SALT_ROUNDS);
 
     if (user._previousDataValues.password !== user.password) {
       return new Promise((resolve, reject) => {
