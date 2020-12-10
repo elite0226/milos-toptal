@@ -30,7 +30,6 @@ function Signup() {
   const { status, error } = useSelector((state) => state.auth);
 
   const handleSubmit = async (values) => {
-    console.log(values);
     await dispatch(
       signup({
         email: values.email,
