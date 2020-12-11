@@ -2,7 +2,7 @@ import { push } from 'connected-react-router';
 
 import authService from 'src/services/auth';
 import { requestFulfilled, requestPending, requestRejected } from 'src/utils/api';
-import { LOGIN_REQUEST, LOGOUT_REQUEST, SIGNUP_REQUEST } from '../types';
+import { GET_PROFILE_REQUEST, LOGIN_REQUEST, LOGOUT_REQUEST, SIGNUP_REQUEST } from '../types';
 
 export function login(payload) {
   return async (dispatch) => {
@@ -46,6 +46,28 @@ export function signup(payload) {
     } catch (error) {
       dispatch({
         type: requestRejected(SIGNUP_REQUEST),
+        payload: error?.response?.data,
+      });
+    }
+  };
+}
+
+export function getProfile() {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: requestPending(GET_PROFILE_REQUEST) });
+
+      const { user } = await authService.getProfile();
+      dispatch({
+        type: requestFulfilled(GET_PROFILE_REQUEST),
+        payload: {
+          user,
+        },
+      });
+      dispatch(push('/home'));
+    } catch (error) {
+      dispatch({
+        type: requestRejected(GET_PROFILE_REQUEST),
         payload: error?.response?.data,
       });
     }
