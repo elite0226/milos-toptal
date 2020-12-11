@@ -38,13 +38,13 @@ const get = async (req, res) => {
       offset,
       order: [['avgRating', 'DESC']],
     });
-    const numberOfRestaurants = await db.Restaurant.count({
+    const totalCount = await db.Restaurant.count({
       where,
     });
 
     return res.status(200).json({
       restaurants,
-      numberOfRestaurants,
+      totalCount,
     });
   } catch (err) {
     return res.status(500).json({
