@@ -23,7 +23,8 @@ import {
   OpenInNew as ViewIcon,
 } from '@material-ui/icons';
 
-import { getRestaurants } from 'src/store/actions/restaurant';
+import RestaurantDialog from '../RestaurantDialog';
+import { getRestaurants, setRestaurant } from 'src/store/actions/restaurant';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
 
@@ -35,6 +36,8 @@ function RestaurantList() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filter, setFilter] = React.useState([1, 5]);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [restaurantId, setRestaurantId] = React.useState(null);
 
   const dispatch = useDispatch();
   const { restaurants, totalCount } = useSelector((state) => state.restaurant);
@@ -66,6 +69,12 @@ function RestaurantList() {
     setFilter(newFilter);
   };
 
+  const handleCreateRestaurant = () => {
+    dispatch(setRestaurant({}));
+    setRestaurantId('new');
+    setOpenDialog(true);
+  };
+
   return (
     <>
       {(profile.role === ROLES.OWNER || profile.role === ROLES.ADMIN) && (
@@ -74,6 +83,7 @@ function RestaurantList() {
             variant="contained"
             color="primary"
             disableElevation
+            onClick={handleCreateRestaurant}
           >
             Create a new restaurant
           </Button>
@@ -166,6 +176,14 @@ function RestaurantList() {
           />
         </TableContainer>
       </Paper>
+      {openDialog && (
+        <RestaurantDialog
+          open={openDialog}
+          restaurantId={restaurantId}
+          onClose={() => setOpenDialog(false)}
+          fetch={fetchRestaurants}
+        />
+      )}
     </>
   );
 }
