@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.use(middlewares.checkRole([ROLES.ADMIN]));
 
-router.route('/').get(userController.get);
+router.get('/', userController.get);
 
 module.exports = router;

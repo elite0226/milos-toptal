@@ -24,7 +24,7 @@ import {
 } from '@material-ui/icons';
 
 import RestaurantDialog from '../RestaurantDialog';
-import { getRestaurants, setRestaurant } from 'src/store/actions/restaurant';
+import { getRestaurants, setRestaurant, deleteRestaurant } from 'src/store/actions/restaurant';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
 
@@ -73,6 +73,22 @@ function RestaurantList() {
     dispatch(setRestaurant({}));
     setRestaurantId('new');
     setOpenDialog(true);
+  };
+
+  const handleUpdateRestaurant = (id) => () => {
+    const restaurant = restaurants.find((item) => item.id === id);
+    dispatch(setRestaurant(restaurant));
+    setRestaurantId(id);
+    setOpenDialog(true);
+  };
+
+  const handleDeleteRestaurant = (id) => async () => {
+    await dispatch(deleteRestaurant(id));
+    if (totalCount === page * rowsPerPage + 1 && page > 0) {
+      setPage(page - 1);
+    } else {
+      fetchRestaurants();
+    }
   };
 
   return (
@@ -144,10 +160,10 @@ function RestaurantList() {
                     </TableCell>
                     {profile.role === ROLES.ADMIN && (
                       <TableCell className={classes.noPadding}>
-                        <IconButton>
+                        <IconButton onClick={handleUpdateRestaurant(restaurant.id)}>
                           <EditIcon color="primary" />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={handleDeleteRestaurant(restaurant.id)}>
                           <DeleteIcon color="error" />
                         </IconButton>
                       </TableCell>
