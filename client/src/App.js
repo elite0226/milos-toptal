@@ -2,9 +2,11 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { CssBaseline } from '@material-ui/core';
+import { SnackbarProvider } from 'notistack';
 
 import configureStore, { history } from './store';
 import Routes from './routes';
+import Toast from 'src/components/Toast';
 
 const store = configureStore();
 
@@ -12,8 +14,17 @@ const App = () => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
-        <CssBaseline />
-        <Routes />
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          <CssBaseline />
+          <Toast />
+          <Routes />
+        </SnackbarProvider>
       </ConnectedRouter>
     </Provider>
   );

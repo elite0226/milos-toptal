@@ -6,6 +6,7 @@ import {
   UPDATE_RESTAURANT_REQUEST,
   DELETE_RESTAURANT_REQUEST,
   SET_RESTAURANT,
+  ENQUEUE_SNACKBAR,
 } from '../types';
 
 export function getRestaurants(offset, limit, params = {}) {
@@ -43,10 +44,34 @@ export function createRestaurant(payload) {
         type: requestFulfilled(CREATE_RESTAURANT_REQUEST),
         payload: { restaurant },
       });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Create a new restaurant successfully',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'success',
+            },
+          },
+        },
+      });
     } catch (error) {
       dispatch({
         type: requestRejected(CREATE_RESTAURANT_REQUEST),
         payload: error?.response?.data,
+      });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Create a new restaurant failed',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'error',
+            },
+          },
+        },
       });
     }
   };
@@ -63,10 +88,34 @@ export function updateRestaurant(restaurantId, payload) {
         type: requestFulfilled(UPDATE_RESTAURANT_REQUEST),
         payload: { restaurant },
       });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Update a restaurant successfully',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'success',
+            },
+          },
+        },
+      });
     } catch (error) {
       dispatch({
         type: requestRejected(UPDATE_RESTAURANT_REQUEST),
         payload: error?.response?.data,
+      });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Update a restaurant successfully',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'error',
+            },
+          },
+        },
       });
     }
   };
@@ -83,10 +132,34 @@ export function deleteRestaurant(restaurantId) {
         type: requestFulfilled(DELETE_RESTAURANT_REQUEST),
         payload: { restaurantId },
       });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Delete a restaurant successfully',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'success',
+            },
+          },
+        },
+      });
     } catch (error) {
       dispatch({
         type: requestRejected(DELETE_RESTAURANT_REQUEST),
         payload: error.response.data,
+      });
+      dispatch({
+        type: ENQUEUE_SNACKBAR,
+        payload: {
+          notification: {
+            message: 'Delete a restaurant successfully',
+            options: {
+              key: new Date().getTime() + Math.random(),
+              variant: 'error',
+            },
+          },
+        },
       });
     }
   };
