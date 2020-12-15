@@ -25,6 +25,7 @@ import {
 
 import RestaurantDialog from '../RestaurantDialog';
 import { getRestaurants, setRestaurant, deleteRestaurant } from 'src/store/actions/restaurant';
+import useDebounce from 'src/hooks/useDebounce';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
 
@@ -39,6 +40,8 @@ function RestaurantList() {
   const [openDialog, setOpenDialog] = React.useState(false);
   const [restaurantId, setRestaurantId] = React.useState(null);
 
+  const debouncedFilter = useDebounce(filter, 500);
+
   const dispatch = useDispatch();
   const { restaurants, totalCount } = useSelector((state) => state.restaurant);
   const { profile } = useSelector((state) => state.auth);
@@ -50,7 +53,8 @@ function RestaurantList() {
         maxRating: filter[1] || 5,
       })
     );
-  }, [dispatch, page, rowsPerPage, filter]);
+    // eslint-disable-next-line
+  }, [dispatch, page, rowsPerPage, debouncedFilter]);
 
   React.useEffect(() => {
     fetchRestaurants();
