@@ -5,6 +5,7 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import LoginPage from '../modules/auth/Login';
 import SignupPage from '../modules/auth/Signup';
 import RestaurantList from '../modules/restaurant/RestaurantList';
+import RestaurantDetails from '../modules/restaurant/RestaurantDetails';
 import { Loader, Layout } from '../components';
 import { getProfile } from 'src/store/actions/auth';
 
@@ -47,6 +48,7 @@ function Routes() {
           <Switch>
             <Route path="/home" component={() => <h4>Home Page</h4>} />
             <Route exact path="/restaurants" component={RestaurantList} />
+            <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
           </Switch>
         </Layout>
       )}
