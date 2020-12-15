@@ -45,7 +45,7 @@ function Layout({ children }) {
           Restaurant
         </Typography>
       </Box>
-      <Box display="flex" height="calc(100vh - 104px)" flexDirection="column" p={2}>
+      <Box display="flex" height="calc(100vh - 73px)" flexDirection="column" p={2}>
         <List>
           {items.map((item) => (
             <NavItem key={item.title} title={item.title} href={item.href} icon={item.icon} />

@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { CssBaseline } from '@material-ui/core';
 import { SnackbarProvider } from 'notistack';
+import { ConfirmProvider } from 'material-ui-confirm';
 
 import configureStore, { history } from './store';
 import Routes from './routes';
@@ -21,9 +22,11 @@ const App = () => {
             horizontal: 'right',
           }}
         >
-          <CssBaseline />
-          <Toast />
-          <Routes />
+          <ConfirmProvider>
+            <CssBaseline />
+            <Toast />
+            <Routes />
+          </ConfirmProvider>
         </SnackbarProvider>
       </ConnectedRouter>
     </Provider>

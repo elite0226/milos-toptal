@@ -22,6 +22,7 @@ import {
   DeleteForever as DeleteIcon,
   OpenInNew as ViewIcon,
 } from '@material-ui/icons';
+import { useConfirm } from 'material-ui-confirm';
 
 import RestaurantDialog from '../RestaurantDialog';
 import { getRestaurants, setRestaurant, deleteRestaurant } from 'src/store/actions/restaurant';
@@ -41,6 +42,7 @@ function RestaurantList() {
   const [restaurantId, setRestaurantId] = React.useState(null);
 
   const debouncedFilter = useDebounce(filter, 500);
+  const confirm = useConfirm();
 
   const dispatch = useDispatch();
   const { restaurants, totalCount } = useSelector((state) => state.restaurant);
@@ -86,13 +88,17 @@ function RestaurantList() {
     setOpenDialog(true);
   };
 
-  const handleDeleteRestaurant = (id) => async () => {
-    await dispatch(deleteRestaurant(id));
-    if (totalCount === page * rowsPerPage + 1 && page > 0) {
-      setPage(page - 1);
-    } else {
-      fetchRestaurants();
-    }
+  const handleDeleteRestaurant = (id) => () => {
+    confirm({
+      description: 'Are you going to delete this restaurant?'
+    }).then(async () => {
+      await dispatch(deleteRestaurant(id));
+      if (totalCount === page * rowsPerPage + 1 && page > 0) {
+        setPage(page - 1);
+      } else {
+        fetchRestaurants();
+      }
+    });
   };
 
   return (
