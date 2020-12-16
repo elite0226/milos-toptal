@@ -23,9 +23,10 @@ import {
 } from '@material-ui/icons';
 
 import { Loader } from 'src/components';
-import { getReviews } from 'src/store/actions/review';
+import { getReviews, setReview } from 'src/store/actions/review';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
+import ReviewDialog from '../ReviewDialog';
 
 import useStyles from './style';
 
@@ -36,6 +37,8 @@ function RestaurantDetails() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(true);
+  const [openReviewDialog, setOpenReviewDialog] = React.useState(false);
+  const [reviewId, setReviewId] = React.useState(null);
 
   const dispatch = useDispatch();
   const { restaurants } = useSelector(state => state.restaurant);
@@ -65,6 +68,12 @@ function RestaurantDetails() {
     setPage(0);
   };
 
+  const handleLeaveComment = () => {
+    dispatch(setReview({}));
+    setOpenReviewDialog(true);
+    setReviewId('new');
+  };
+
   return loading ? (
     <Loader />
   ) : (
@@ -78,6 +87,7 @@ function RestaurantDetails() {
                 variant="contained"
                 color="primary"
                 disableElevation
+                onClick={handleLeaveComment}
               >
                 Leave comment
               </Button>
@@ -113,7 +123,7 @@ function RestaurantDetails() {
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: 70 }}>#</TableCell>
-                <TableCell>Commenter</TableCell>
+                <TableCell>Reviewer</TableCell>
                 <TableCell>Rating</TableCell>
                 <TableCell>Visit Date</TableCell>
                 <TableCell>Comment</TableCell>
@@ -127,8 +137,8 @@ function RestaurantDetails() {
                   <TableRow key={review.id}>
                     <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                     <TableCell>
-                      {review.commenter
-                        ? `${review.commenter.firstName} ${review.commenter.lastName}`
+                      {review.reviewer
+                        ? `${review.reviewer.firstName} ${review.reviewer.lastName}`
                         : ''}
                     </TableCell>
                     <TableCell>
@@ -178,6 +188,14 @@ function RestaurantDetails() {
           />
         </TableContainer>
       </Paper>
+      {openReviewDialog && (
+        <ReviewDialog
+          open={openReviewDialog}
+          reviewId={reviewId}
+          fetch={fetchReviews}
+          onClose={() => setOpenReviewDialog(false)}
+        />
+      )}
     </>
   );
 }

@@ -1,7 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
 
 import { requestFulfilled, requestRejected } from 'src/utils/api';
-import { GET_REVIEWS_REQUEST } from '../types';
+import {
+  CREATE_REVIEW_REQUEST,
+  GET_REVIEWS_REQUEST,
+  SET_REVIEW,
+  DELETE_REVIEW_REQUEST,
+  UPDATE_REVIEW_REQUEST,
+} from '../types';
 
 const initialState = {
   reviews: [],
@@ -37,5 +43,50 @@ export default createReducer(initialState, {
     totalCount: 0,
     error: payload?.error,
     status: requestRejected(GET_REVIEWS_REQUEST),
+  }),
+
+  [requestFulfilled(CREATE_REVIEW_REQUEST)]: (state, { payload }) => ({
+    ...state,
+    totalCount: state.totalCount + 1,
+    canReply: false,
+    status: requestFulfilled(CREATE_REVIEW_REQUEST),
+  }),
+
+  [requestRejected(CREATE_REVIEW_REQUEST)]: (state, { payload }) => ({
+    ...state,
+    error: payload?.error,
+    status: requestRejected(CREATE_REVIEW_REQUEST),
+  }),
+
+  [requestFulfilled(UPDATE_REVIEW_REQUEST)]: (state, { payload }) => ({
+    ...state,
+    review: payload.review,
+    status: requestFulfilled(UPDATE_REVIEW_REQUEST),
+  }),
+
+  [requestFulfilled(UPDATE_REVIEW_REQUEST)]: (state, { payload }) => ({
+    ...state,
+    review: {},
+    error: payload?.error,
+    status: requestRejected(UPDATE_REVIEW_REQUEST),
+  }),
+
+  [requestFulfilled(DELETE_REVIEW_REQUEST)]: (state, { payload }) => {
+    const filteredItem = state.reviews.filter((review) => review.id === payload.reviewId);
+    state.reviews = filteredItem;
+    state.status = requestFulfilled(DELETE_REVIEW_REQUEST);
+  },
+
+  [requestRejected(DELETE_REVIEW_REQUEST)]: (state, { payload }) => ({
+    ...state,
+    review: {},
+    error: payload?.error,
+    status: requestRejected(DELETE_REVIEW_REQUEST),
+  }),
+
+  [SET_REVIEW]: (state, { payload }) => ({
+    ...state,
+    review: payload.review,
+    status: SET_REVIEW,
   }),
 });
