@@ -32,7 +32,7 @@ export default createReducer(initialState, {
   [requestRejected(SIGNUP_REQUEST)]: (state, { payload }) => ({
     ...state,
     profile: null,
-    error: payload.error,
+    error: payload?.error,
     status: requestRejected(SIGNUP_REQUEST),
   }),
 
@@ -45,7 +45,7 @@ export default createReducer(initialState, {
   [requestRejected(GET_PROFILE_REQUEST)]: (state, { payload }) => ({
     ...state,
     prpofile: null,
-    error: payload.error,
+    error: payload?.error,
     status: requestRejected(GET_PROFILE_REQUEST),
   }),
 

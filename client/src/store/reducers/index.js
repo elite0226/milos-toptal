@@ -5,6 +5,7 @@ import authReducer from './auth';
 import restaurantReducer from './restaurant';
 import userReducer from './user';
 import toastReducer from './toast';
+import reviewReducer from './review';
 
 const createRootReducer = (history) =>
   combineReducers({
@@ -13,6 +14,7 @@ const createRootReducer = (history) =>
     restaurant: restaurantReducer,
     user: userReducer,
     toast: toastReducer,
+    review: reviewReducer,
   });
 
 export default createRootReducer;
