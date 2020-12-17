@@ -8,6 +8,11 @@ const router = express.Router();
 
 router.use(middlewares.checkRole([ROLES.ADMIN]));
 
-router.get('/', userController.get);
+router.route('/').get(userController.get).post(userController.create);
+
+router
+  .route('/:userId')
+  .put(middlewares.checkUserExist, userController.update)
+  .delete(middlewares.checkUserExist, userController.remove);
 
 module.exports = router;

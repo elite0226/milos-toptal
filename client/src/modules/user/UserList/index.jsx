@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  Box,
+  Button,
   IconButton,
   Paper,
   Table,
@@ -16,7 +18,7 @@ import { useConfirm } from 'material-ui-confirm';
 
 import { Loader } from 'src/components';
 import { getUsers, deleteUser, setUser } from 'src/store/actions/user';
-// import UserDialog from '../UserDialog';
+import UserDialog from '../UserDialog';
 
 import useStyles from './style';
 
@@ -53,9 +55,15 @@ const UsersList = () => {
     setPage(0);
   };
 
+  const handleCreateUser = () => {
+    dispatch(setUser({}));
+    setOpenDialog(true);
+    setUserId('new');
+  };
+
   const handleUpdateUser = (id) => () => {
     const user = users.find((item) => item.id === id);
-    // dispatch(setUser(user));
+    dispatch(setUser(user));
     setOpenDialog(true);
     setUserId(id);
   };
@@ -64,7 +72,7 @@ const UsersList = () => {
     confirm({
       description: 'Are you going to delete this user?',
     }).then(async () => {
-      // await dispatch(deleteUser(id));
+      await dispatch(deleteUser(id));
       
       if (totalCount === page * rowsPerPage + 1 && page > 0) {
         setPage(page - 1);
@@ -76,6 +84,16 @@ const UsersList = () => {
 
   return (
     <>
+      <Box display="flex" justifyContent="flex-end" mb={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          disableElevation
+          onClick={handleCreateUser}
+        >
+          Create a new user
+        </Button>
+      </Box>
       <Paper className={classes.paper}>
         {loading ? (
           <Loader />
@@ -125,14 +143,14 @@ const UsersList = () => {
           </TableContainer>
         )}
       </Paper>
-      {/* {openDialog && (
+      {openDialog && (
         <UserDialog
           userId={userId}
           open={openDialog}
           onClose={() => setOpenDialog(false)}
           fetch={fetchUsers}
         />
-      )} */}
+      )}
     </>
   );
 };

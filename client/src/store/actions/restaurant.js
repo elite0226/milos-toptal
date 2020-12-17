@@ -109,7 +109,7 @@ export function updateRestaurant(restaurantId, payload) {
         type: ENQUEUE_SNACKBAR,
         payload: {
           notification: {
-            message: 'Update a restaurant successfully',
+            message: 'Update a restaurant failed',
             options: {
               key: new Date().getTime() + Math.random(),
               variant: 'error',

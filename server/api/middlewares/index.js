@@ -39,8 +39,23 @@ const checkReviewExist = async (req, res, next) => {
   next();
 };
 
+const checkUserExist = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const user = await db.User.findOne({
+    where: { id: userId },
+  });
+  if (!user) {
+    return res.status(404).json({
+      error: 'User not found',
+    });
+  }
+  next();
+};
+
 module.exports = {
   checkRole,
   checkRestaurantExist,
   checkReviewExist,
+  checkUserExist,
 };

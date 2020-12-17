@@ -25,6 +25,7 @@ const UserDialog = ({ open, userId, onClose, fetch }) => {
   const { user } = useSelector((state) => state.user);
 
   const handleSubmit = async (values) => {
+    console.log('sumbitted', values);
     const data = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -40,7 +41,8 @@ const UserDialog = ({ open, userId, onClose, fetch }) => {
       onClose();
       fetch();
     } else {
-      dispatch(updateUser(user.id, data));
+      console.log(userId, data);
+      await dispatch(updateUser(userId, data));
       onClose();
     }
   };
@@ -55,14 +57,13 @@ const UserDialog = ({ open, userId, onClose, fetch }) => {
       password: '',
       confirmPassword: '',
     },
-    enableReinitialize: true,
     validationSchema,
     onSubmit: handleSubmit,
   })
 
   return (
     <Dialog onClose={onClose} aria-labelledby="user-dialog" open={open}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
         <DialogTitle disableTypography>
           <Typography variant="h4">
             {userId === 'new' ? 'CREATE A USER' : 'UPDATE A USER'}
