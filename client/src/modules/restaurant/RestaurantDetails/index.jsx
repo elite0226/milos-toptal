@@ -21,9 +21,10 @@ import {
   DeleteForever as DeleteIcon,
   Reply as ReplyIcon,
 } from '@material-ui/icons';
+import { useConfirm } from 'material-ui-confirm';
 
 import { Loader } from 'src/components';
-import { getReviews, setReview } from 'src/store/actions/review';
+import { getReviews, setReview, deleteReview } from 'src/store/actions/review';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
 import ReviewDialog from '../ReviewDialog';
@@ -44,6 +45,8 @@ function RestaurantDetails() {
   const { restaurants } = useSelector(state => state.restaurant);
   const { profile } = useSelector(state => state.auth);
   const { reviews, totalCount, average, highest, lowest, canReply } = useSelector(state => state.review);
+
+  const confirm = useConfirm();
 
   const fetchReviews = React.useCallback(async () => {
     setLoading(true);
@@ -72,6 +75,26 @@ function RestaurantDetails() {
     dispatch(setReview({}));
     setOpenReviewDialog(true);
     setReviewId('new');
+  };
+
+  const handleUpdateReview = (id) => () => {
+    const review = reviews.find((item) => item.id === id);
+    dispatch(setReview(review));
+    setReviewId(id);
+    setOpenReviewDialog(true);
+  };
+
+  const handleDeleteReview = (id) => () => {
+    confirm({
+      description: 'Are you going to delete this restaurant?',
+    }).then(async () => {
+      await dispatch(deleteReview(restaurantId, id));
+      if (totalCount === page * rowsPerPage + 1 && page > 0) {
+        setPage(page - 1);
+      } else {
+        fetchReviews();
+      }
+    });
   };
 
   return loading ? (
@@ -165,10 +188,10 @@ function RestaurantDetails() {
                     </TableCell>
                     {profile.role === ROLES.ADMIN && (
                       <TableCell className={classes.noPadding}>
-                        <IconButton>
+                        <IconButton onClick={handleUpdateReview(review.id)}>
                           <EditIcon color="primary" />
                         </IconButton>
-                        <IconButton>
+                        <IconButton onClick={handleDeleteReview(review.id)}>
                           <DeleteIcon color="error" />
                         </IconButton>
                       </TableCell>

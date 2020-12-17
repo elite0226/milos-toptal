@@ -42,7 +42,7 @@ function ReviewDialog({ open, reviewId, onClose, fetch }) {
 
   const formik = useFormik({
     initialValues: {
-      reviewerId: review?.commenter?.id || profile.id,
+      reviewerId: review?.reviewer?.id || profile.id,
       rating: review?.rating || 1,
       visitDate: (review?.visitDate || '').slice(0, 10),
       comment: review?.comment || '',
