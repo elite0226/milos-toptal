@@ -9,6 +9,7 @@ import RestaurantDetails from '../modules/restaurant/RestaurantDetails';
 import UserList from '../modules/user/UserList';
 import Settings from '../modules/settings/Settings';
 import { Loader, Layout } from '../components';
+import AdminRoute from './AdminRoute';
 import { getProfile } from 'src/store/actions/auth';
 
 function Routes() {
@@ -51,7 +52,7 @@ function Routes() {
             <Route path="/home" component={() => <h4>Home Page</h4>} />
             <Route exact path="/restaurants" component={RestaurantList} />
             <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
-            <Route exact path="/users" component={UserList} />
+            <AdminRoute exact path="/users" component={UserList} />
             <Route exact path="/settings" component={Settings} />
           </Switch>
         </Layout>
