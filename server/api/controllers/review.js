@@ -52,7 +52,7 @@ const get = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  const { rating, visitDate, comment, reviewerId } = req.body;
+  const { rating, visitDate, comment, reviewerId, reply } = req.body;
   const { restaurantId } = req.params;
 
   // validation
@@ -90,6 +90,7 @@ const create = async (req, res) => {
       comment,
       restaurantId,
       reviewerId,
+      reply,
     });
     const restaurant = await db.Restaurant.findOne({
       where: { id: restaurantId },

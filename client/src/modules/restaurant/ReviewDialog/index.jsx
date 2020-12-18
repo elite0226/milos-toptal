@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -15,6 +15,7 @@ import { useFormik } from 'formik';
 
 import { InputField } from 'src/components';
 import { createReview, updateReview } from 'src/store/actions/review';
+import { getUsers } from 'src/store/actions/user';
 import ROLES from 'src/constants';
 
 import validationSchema from './schema';
@@ -23,10 +24,17 @@ function ReviewDialog({ open, reviewId, onClose, fetch }) {
   const { restaurantId } = useParams();
 
   const dispatch = useDispatch();
-  const { review } = useSelector((state) => state.review);
+  const { review, reviews } = useSelector((state) => state.review);
+  const { users } = useSelector((state) => state.user);
   const { profile } = useSelector((state) => state.auth);
 
-  const [rating, setRating] = useState(review.rating || 1);
+  const [rating, setRating] = React.useState(review.rating || 1);
+
+  React.useEffect(() => {
+    if (profile.role === ROLES.ADMIN) {
+      dispatch(getUsers());
+    }
+  }, [dispatch, profile]);
 
   const handleSubmit = async (values) => {
     if (reviewId === 'new') {
@@ -42,7 +50,7 @@ function ReviewDialog({ open, reviewId, onClose, fetch }) {
 
   const formik = useFormik({
     initialValues: {
-      reviewerId: review?.reviewer?.id || profile.id,
+      reviewerId: review?.reviewer?.id || (profile.role === ROLES.ADMIn ? '' : profile.id),
       rating: review?.rating || 1,
       visitDate: (review?.visitDate || '').slice(0, 10),
       comment: review?.comment || '',
@@ -63,7 +71,28 @@ function ReviewDialog({ open, reviewId, onClose, fetch }) {
             </Typography>
           </DialogTitle>
           <DialogContent>
-            <Box mb={1}>
+            {profile.role === ROLES.ADMIN && (
+              <InputField
+                formik={formik}
+                type="select"
+                name="reviewerId"
+                label="Reviewer"
+                placeholder="Reviewer"
+                options={[
+                  { label: '', value: '' },
+                  ...users
+                    .filter((user) => {
+                      if (user.role === ROLES.USER) {
+                        const exist = reviews.find((re) => re?.reviewer?.id === user.id);
+                        return !exist;
+                      }
+                      return false;
+                    })
+                    .map((user) => ({ label: `${user.firstName} ${user.lastName}`, value: user.id})),
+                ]}
+              />
+            )}
+            <Box mb={1} mt={profile.role === ROLES.ADMIn ? 3 : 0}>
               <Typography component="legend">How do you like this restaurant?</Typography>
               <Box display="flex" alignItems="center" mt="4px">
                 <Rating value={1} max={1} readOnly />
