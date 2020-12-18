@@ -7,6 +7,7 @@ import SignupPage from '../modules/auth/Signup';
 import RestaurantList from '../modules/restaurant/RestaurantList';
 import RestaurantDetails from '../modules/restaurant/RestaurantDetails';
 import UserList from '../modules/user/UserList';
+import Settings from '../modules/settings/Settings';
 import { Loader, Layout } from '../components';
 import { getProfile } from 'src/store/actions/auth';
 
@@ -51,6 +52,7 @@ function Routes() {
             <Route exact path="/restaurants" component={RestaurantList} />
             <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
             <Route exact path="/users" component={UserList} />
+            <Route exact path="/settings" component={Settings} />
           </Switch>
         </Layout>
       )}

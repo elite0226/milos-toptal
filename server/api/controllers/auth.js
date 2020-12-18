@@ -111,8 +111,58 @@ const getUser = async (req, res) => {
   return res.json({ user: req.user });
 };
 
+const updateUser = async (req, res) => {
+  if (req.body.role === ROLES.ADMIN) {
+    return res.status(400).json({
+      error: 'Invalid role',
+    });
+  }
+
+  try {
+    await db.User.update(
+      { ...req.body },
+      {
+        where: { id: req.user.id },
+        individualHooks: true,
+      }
+    );
+
+    const user = await db.User.findOne({
+      where: { id: req.user.id },
+      attributes: ['id', 'firstName', 'lastName', 'email', 'role'],
+    });
+
+    return res.status(200).json({ user });
+  } catch (err) {
+    if (err.errors && err.errors[0].message === 'email must be unique') {
+      return res.status(409).json({
+        error: 'Email is already taken',
+      });
+    }
+    return res.status(500).json({
+      error: err.toString(),
+    });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    await db.User.destroy({
+      where: { id: req.user.id },
+    });
+
+    return res.status(204).json({ success: true });
+  } catch (err) {
+    return res.status(500).json({
+      error: err.toString(),
+    });
+  }
+};
+
 module.exports = {
   login,
   signup,
   getUser,
+  updateUser,
+  deleteUser,
 };
