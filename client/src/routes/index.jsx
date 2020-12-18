@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
+import HomePage from '../modules/main/HomePage';
 import LoginPage from '../modules/auth/Login';
 import SignupPage from '../modules/auth/Signup';
 import RestaurantList from '../modules/restaurant/RestaurantList';
@@ -49,7 +50,7 @@ function Routes() {
       {isLoggedIn && (
         <Layout>
           <Switch>
-            <Route path="/home" component={() => <h4>Home Page</h4>} />
+            <Route path="/home" component={HomePage} />
             <Route exact path="/restaurants" component={RestaurantList} />
             <Route exact path="/restaurants/:restaurantId" component={RestaurantDetails} />
             <AdminRoute exact path="/users" component={UserList} />

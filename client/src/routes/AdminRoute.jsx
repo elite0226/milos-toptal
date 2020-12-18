@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Route, Redirect } from 'react-router-dom';
 
-import ROLES from 'src/constants/roles';
+import ROLES from 'src/constants';
 
 const AdminRoute = (props) => {
   const { component: Component, ...rest } = props;
