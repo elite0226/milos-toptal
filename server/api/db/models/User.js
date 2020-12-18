@@ -83,5 +83,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  User.beforeUpdate(async (user) => {
+    const salt = await bcrypt.genSalt(+SALT_ROUNDS);
+
+    if (user._previousDataValues.password !== user.password) {
+      return new Promise((resolve, reject) => {
+        bcrypt.hash(user.password, salt, (err, hash) => {
+          if (err) {
+            return reject('Failed to generate hash');
+          }
+          return resolve(hash);
+        });
+      })
+        .then((hash) => {
+          user.password = hash;
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    }
+  });
+
   return User;
 };

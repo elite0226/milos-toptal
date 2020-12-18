@@ -16,7 +16,8 @@ import { updateUser, createUser } from 'src/store/actions/user';
 import { InputField } from 'src/components';
 
 const ROLES = [
-  { label: 'Regular User', value: 'regular user' },
+  { label: '', value: '' },
+  { label: 'Regular User', value: 'user' },
   { label: 'Restaurant Owner', value: 'owner' },
 ];
 
@@ -25,7 +26,6 @@ const UserDialog = ({ open, userId, onClose, fetch }) => {
   const { user } = useSelector((state) => state.user);
 
   const handleSubmit = async (values) => {
-    console.log('sumbitted', values);
     const data = {
       firstName: values.firstName,
       lastName: values.lastName,
@@ -41,7 +41,6 @@ const UserDialog = ({ open, userId, onClose, fetch }) => {
       onClose();
       fetch();
     } else {
-      console.log(userId, data);
       await dispatch(updateUser(userId, data));
       onClose();
     }

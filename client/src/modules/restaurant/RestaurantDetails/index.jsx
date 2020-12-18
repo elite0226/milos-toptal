@@ -28,6 +28,7 @@ import { getReviews, setReview, deleteReview } from 'src/store/actions/review';
 import { decimalFormat } from 'src/utils/number';
 import ROLES from 'src/constants';
 import ReviewDialog from '../ReviewDialog';
+import ReplyDialog from '../ReplyDialog';
 
 import useStyles from './style';
 
@@ -39,6 +40,7 @@ function RestaurantDetails() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(true);
   const [openReviewDialog, setOpenReviewDialog] = React.useState(false);
+  const [openReplyDialog, setOpenReplyDialog] = React.useState(false);
   const [reviewId, setReviewId] = React.useState(null);
 
   const dispatch = useDispatch();
@@ -75,6 +77,11 @@ function RestaurantDetails() {
     dispatch(setReview({}));
     setOpenReviewDialog(true);
     setReviewId('new');
+  };
+
+  const handleSelectReview = (id) => () => {
+    setOpenReplyDialog(true);
+    setReviewId(id);
   };
 
   const handleUpdateReview = (id) => () => {
@@ -181,7 +188,7 @@ function RestaurantDetails() {
                       {review.reply || profile.role !== ROLES.OWNER ? (
                         review.reply
                       ) : (
-                        <IconButton>
+                        <IconButton onClick={handleSelectReview(review.id)}>
                           <ReplyIcon />
                         </IconButton>
                       )}
@@ -217,6 +224,15 @@ function RestaurantDetails() {
           reviewId={reviewId}
           fetch={fetchReviews}
           onClose={() => setOpenReviewDialog(false)}
+        />
+      )}
+      {openReplyDialog && (
+        <ReplyDialog
+          open={openReplyDialog}
+          restaurantId={restaurantId}
+          reviewId={reviewId}
+          fetch={fetchReviews}
+          onClose={() => setOpenReplyDialog(false)}
         />
       )}
     </>

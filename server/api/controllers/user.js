@@ -124,7 +124,7 @@ const update = async (req, res) => {
       });
     } else if (prevUser.role === ROLES.USER && user.role !== ROLES.USER) {
       const reviews = await db.Review.findAll({
-        where: { commenterId: userId },
+        where: { reviewerId: userId },
       });
 
       const promises = reviews.map(async (review) => {
@@ -165,7 +165,7 @@ const remove = async (req, res) => {
 
   try {
     const reviews = await db.Review.findAll({
-      where: { commenterId: userId },
+      where: { reviewerId: userId },
     });
 
     const promises = reviews.map(async (review) => {

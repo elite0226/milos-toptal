@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      commenterId: {
+      reviewerId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {
